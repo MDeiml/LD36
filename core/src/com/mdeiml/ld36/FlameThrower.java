@@ -58,8 +58,6 @@ public class FlameThrower extends Component {
                     continue;
                 }
                 WagonComponent wc = (WagonComponent)go.components.get("WagonComponent");
-                if(go == g.scene.objects.get("Player"))
-                    System.out.println(wc);
                 if(wc != null) {
                     wc.slow(0);
                 }

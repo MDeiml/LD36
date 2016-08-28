@@ -16,6 +16,7 @@ public class Level extends GameObject {
 
     @Override
     public void init() {
+        Gdx.gl.glClearColor(0.6f,0.7f,1,1);
         Pixmap pixmap = new Pixmap(Gdx.files.internal("bdx/textures/track.png"));
         grounds = new Ground[pixmap.getWidth()][pixmap.getHeight()];
         for(int x = 0; x < pixmap.getWidth(); x++) {
@@ -88,6 +89,21 @@ public class Level extends GameObject {
             int startPosY = i/2;
             int startPosX = i%2;
             w.position(startX*10+(startPosX == 0 ? -2 : +2), (startY-startPosY*0.5f)*10, 0.25f);
+        }
+        for(int i = 0; i < pixmap.getWidth(); i++) {
+            GameObject wall = scene.add("Wall");
+            wall.position(i*10, -5, 5);
+            wall.rotate(0, 0, (float)(Math.PI));
+            wall = scene.add("Wall");
+            wall.position(i*10, pixmap.getHeight()*10-5, 5);
+        }
+        for(int i = 0; i < pixmap.getHeight(); i++) {
+            GameObject wall = scene.add("Wall");
+            wall.position(-5, i*10, 5);
+            wall.rotate(0, 0, (float)(Math.PI/2));
+            wall = scene.add("Wall");
+            wall.position(pixmap.getWidth()*10-5, i*10, 5);
+            wall.rotate(0, 0, -(float)(Math.PI/2));
         }
     }
 
