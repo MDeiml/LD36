@@ -36,6 +36,9 @@ public class Player extends GameObject {
 
     public void main() {
         //Controls
+        if(Bdx.keyboard.keyHit("esc")) {
+            Bdx.end();
+        }
         if(components.get("FlameThrower") != null) {
             if(Bdx.keyboard.keyHit("h")) {
                 ((FlameThrower)components.get("FlameThrower")).toggle(true);

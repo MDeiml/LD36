@@ -25,7 +25,7 @@ public class Wagon extends GameObject {
         GameObject wagon = children.get("G_Wagon");
         wagon.components.add(new BillboardComponent(wagon));
         SpriteAnim wagonAnim = new SpriteAnim(wagon, 85, 85);
-        wagonAnim.add("default", 0, new int[]{0, 1}, 5, true);
+        wagonAnim.add("default", (int)(Math.random()*2), new int[]{0, 1}, 5, true);
         wagon.components.add(wagonAnim);
         wagonAnim.play("default");
         GameObject horse = children.get("Horse");
@@ -62,7 +62,6 @@ public class Wagon extends GameObject {
             }
             fireCooldown -= Bdx.TICK_TIME;
             if(fireCooldown <= -1) {
-                System.out.println("a");
                 fireCooldown = 10;
             }
         }else {
