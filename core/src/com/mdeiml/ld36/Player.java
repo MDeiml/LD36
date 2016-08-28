@@ -57,7 +57,9 @@ public class Player extends GameObject {
         }
         if(children.get("Wing") != null) {
             if(Bdx.keyboard.keyHit("space")) {
-                ((Wing)children.get("Wing")).use();
+                if(((Wing)children.get("Wing")).use()) {
+                    Bdx.sounds.get("jump").play();
+                }
             }
         }
 

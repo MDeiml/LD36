@@ -16,11 +16,12 @@ public class Wing extends GameObject {
         sa.play("default");
     }
 
-    public void use() {
+    public boolean use() {
         if(!parent().touching("Ground")) {
-            return;
+            return false;
         }
         parent().applyForce(0,0,4/Bdx.TICK_TIME);
+        return true;
     }
 
     public void main() {
