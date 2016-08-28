@@ -36,20 +36,26 @@ public class Player extends GameObject {
 
     public void main() {
         //Controls
-        if(Bdx.keyboard.keyHit("h")) {
-            ((FlameThrower)components.get("FlameThrower")).toggle(true);
+        if(components.get("FlameThrower") != null) {
+            if(Bdx.keyboard.keyHit("h")) {
+                ((FlameThrower)components.get("FlameThrower")).toggle(true);
+            }
+            if(Bdx.keyboard.keyUp("h")) {
+                ((FlameThrower)components.get("FlameThrower")).toggle(false);
+            }
         }
-        if(Bdx.keyboard.keyUp("h")) {
-            ((FlameThrower)components.get("FlameThrower")).toggle(false);
+        if(components.get("SpikeComponent") != null) {
+            if(Bdx.keyboard.keyHit("j")) {
+                ((SpikeComponent)components.get("SpikeComponent")).toggle(true);
+            }
+            if(Bdx.keyboard.keyUp("j")) {
+                ((SpikeComponent)components.get("SpikeComponent")).toggle(false);
+            }
         }
-        if(Bdx.keyboard.keyHit("j")) {
-            ((SpikeComponent)components.get("SpikeComponent")).toggle(true);
-        }
-        if(Bdx.keyboard.keyUp("j")) {
-            ((SpikeComponent)components.get("SpikeComponent")).toggle(false);
-        }
-        if(Bdx.keyboard.keyHit("space")) {
-            ((Wing)children.get("Wing")).use();
+        if(children.get("Wing") != null) {
+            if(Bdx.keyboard.keyHit("space")) {
+                ((Wing)children.get("Wing")).use();
+            }
         }
 
         if(touching("Ground")) {

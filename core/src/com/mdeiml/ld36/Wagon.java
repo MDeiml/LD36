@@ -1,7 +1,8 @@
 package com.mdeiml.ld36;
 
-import com.nilunder.bdx.components.SpriteAnim;
+import com.mdeiml.ld36.WagonComponent;
 import com.nilunder.bdx.*;
+import com.nilunder.bdx.components.SpriteAnim;
 import java.util.ArrayList;
 import javax.vecmath.*;
 
@@ -15,6 +16,7 @@ public class Wagon extends GameObject {
     private boolean onStart;
     private int turnMode;
     private float turnTimer;
+    private float fireCooldown;
 
     public void init() {
         components.add(new WagonComponent(this));
@@ -34,9 +36,44 @@ public class Wagon extends GameObject {
         horseAnim.play("default");
         turnMode = 0;
         turnTimer = 0;
+
+        components.add(new FlameThrower(this));
+        fireCooldown = (float)(Math.random()*5+5);
     }
 
     public void main() {
+        //Extras
+        if(components.get("FlameThrower") != null) {
+            GameObject sensor = children.get("FlameThrowerSensor");
+            boolean shoot = false;
+            for(GameObject go : sensor.touchingObjects) {
+                if(go == this) {
+                    continue;
+                }
+                WagonComponent wc = (WagonComponent)go.components.get("WagonComponent");
+                if(wc != null) {
+                    shoot = true;
+                }
+            }
+            if(fireCooldown <= 0 && shoot) {
+                ((FlameThrower)components.get("FlameThrower")).toggle(true);
+            }else {
+                ((FlameThrower)components.get("FlameThrower")).toggle(false);
+            }
+            fireCooldown -= Bdx.TICK_TIME;
+            if(fireCooldown <= -1) {
+                System.out.println("a");
+                fireCooldown = 10;
+            }
+        }else {
+            if(fireCooldown < 0) {
+                fireCooldown = -10*fireCooldown;
+            }
+        }
+        if(fireCooldown > 0) {
+            fireCooldown = Math.max(0, fireCooldown-Bdx.TICK_TIME);
+        }
+
         if(!onStart && level.getStartX() != -1) {
             targetX = level.getStartX();
             targetY = level.getStartY();
@@ -95,7 +132,7 @@ public class Wagon extends GameObject {
             lastTargetY = y;
             lastTargetX = x;
         }
-        if(touching("Barrel") || touching("Fence") || touching("Stone")) {
+        if(velocity().length() < 1 && (touching("Barrel") || touching("Fence") || touching("Stone") || touching("Player") || touching("Wagon"))) {
             if(turnMode == 0) {
                 turnMode = Math.random() > 0.5 ? -1 : 1;
             }
