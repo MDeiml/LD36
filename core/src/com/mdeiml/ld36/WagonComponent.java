@@ -7,12 +7,16 @@ public class WagonComponent extends Component {
 
     private Level level;
     private float extSlow;
+    private boolean check;
+    private int lap;
 
     public WagonComponent(GameObject g) {
         super(g);
         this.level = (Level)g.scene.objects.get("Level");
         state(def);
         extSlow = 100;
+        check = false;
+        lap = 0;
     }
 
     public void slow() {
@@ -35,12 +39,19 @@ public class WagonComponent extends Component {
             float y1 = (g.position().y+5)/10;
             int x = (int)x1;
             int y = (int)y1;
+            if(x == level.getCheckX() && y == level.getCheckY()) {
+                check = true;
+            }
             x1 -= x;
             y1 -= y;
             Ground ground = level.getGround(x, y);
             boolean slow = false;
             switch(ground.getId()) {
                 case 7:
+                    if(check) {
+                        lap++;
+                        check = false;
+                    }
                 case 0:
                     slow = x1 < 0.25f || x1 > 0.75f;
                     break;
