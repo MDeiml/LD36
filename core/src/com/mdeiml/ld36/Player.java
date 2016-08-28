@@ -1,34 +1,44 @@
 package com.mdeiml.ld36;
 
 import com.nilunder.bdx.*;
+import com.nilunder.bdx.components.SpriteAnim;
 import java.util.ArrayList;
 import javax.vecmath.*;
 
 public class Player extends GameObject {
 
-    private ArrayList<GameObject> grounds;
-    private int gMin;
-    private int gMax;
     private GameObject cameraCross;
     private float camRot;
+    private Level level;
 
     public void init() {
-        grounds = new ArrayList<GameObject>();
-        gMin = 0;
-        gMax = 0;
-        cameraCross = scene.objects.get("CameraCross");
+        cameraCross = children.get("CameraCross");
         camRot = 0;
+        components.add(new WagonComponent(this));
+        components.add(new FlameThrower(this));
+        GameObject gPlayer = children.get("G_Player");
+        gPlayer.components.add(new BillboardComponent(gPlayer));
+        SpriteAnim playerAnim = new SpriteAnim(gPlayer, 85, 85);
+        playerAnim.add("default", 0, new int[]{0, 1}, 5, true);
+        gPlayer.components.add(playerAnim);
+        playerAnim.play("default");
+        GameObject horse = children.get("PHorse");
+        horse.components.add(new BillboardComponent(horse));
+        SpriteAnim horseAnim = new SpriteAnim(horse, 101, 101);
+        horseAnim.add("default", 0, new int[]{0, 1}, 5, true);
+        horse.components.add(horseAnim);
+        horseAnim.play("default");
     }
 
     public void main() {
-        Vector3f velocity = velocity();
-        float vel = (float)Math.sqrt(velocity.x*velocity.x+velocity.y*velocity.y);
-        vel += Bdx.TICK_TIME+0.1f;
-        vel = Math.min(10, vel);
-        Vector3f forward = orientation().mult(new Vector3f(0,1,0));
-        velocity(forward.x*vel,forward.y*vel,velocity().z);
-        children.get("G_Player").orientation(scene.camera.orientation());
-        children.get("PHorse").orientation(scene.camera.orientation());
+        //Controls
+        if(Bdx.keyboard.keyHit("h")) {
+            ((FlameThrower)components.get("FlameThrower")).toggle(true);
+        }
+        if(Bdx.keyboard.keyUp("h")) {
+            ((FlameThrower)components.get("FlameThrower")).toggle(false);
+        }
+
         float va = 0;
         if(Bdx.keyboard.keyDown("a")) {
             va += 2;
@@ -57,12 +67,6 @@ public class Player extends GameObject {
             cameraCross.rotate(0,0,rot);
             camRot -= rot;
         }
-        // if(position().y > gMax * 10 - 15) {
-        //     GameObject ground = scene.add("Ground");
-        //     ground.position(0,gMax*10, 0);
-        //     grounds.add(ground);
-        //     gMax++;
-        // }
     }
 
 }

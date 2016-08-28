@@ -4,13 +4,8 @@ import com.nilunder.bdx.*;
 
 public class Barrel extends GameObject {
 
-    public void main() {
-        children.get("G_Barrel").orientation(scene.camera.orientation());
-        GameObject wagon = touchingObjects.get("Wagon");
-        if(wagon != null) {
-            //TEOSLKJDGPJM;:w
-            
-        }
+    public void init() {
+        children.get("G_Barrel").components.add(new BillboardComponent(children.get("G_Barrel")));
     }
 
 }

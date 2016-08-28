@@ -15,4 +15,8 @@ public class Ground extends GameObject {
         ta.set(new TextureRegion(new Texture("bdx/textures/Ground"+id+".png")));
     }
 
+    public int getId() {
+        return id;
+    }
+
 }
