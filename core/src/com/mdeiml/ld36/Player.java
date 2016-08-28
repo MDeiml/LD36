@@ -63,7 +63,7 @@ public class Player extends GameObject {
             }
         }
 
-        if(touching("Ground")) {
+        if(position().z < 0.16f || touching("Ground")) {
             float va = 0;
             if(Bdx.keyboard.keyDown("a")) {
                 va += 2;
