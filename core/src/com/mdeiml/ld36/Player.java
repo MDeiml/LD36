@@ -10,6 +10,7 @@ public class Player extends GameObject {
     private GameObject cameraCross;
     private float camRot;
     private Level level;
+    public int money;
 
     public void init() {
         cameraCross = children.get("CameraCross");
@@ -32,6 +33,7 @@ public class Player extends GameObject {
         horseAnim.play("default");
         GameObject wing = scene.objects.get("Wing");
         wing.parent(this);
+        money = 10000;
     }
 
     public void main() {
