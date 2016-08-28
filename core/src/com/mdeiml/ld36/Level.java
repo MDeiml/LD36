@@ -6,11 +6,13 @@ import com.badlogic.gdx.Gdx;
 
 public class Level extends GameObject {
 
-    private static final int[] colors = new int[] {0xfd0101ff, 0x180891ff, 0x098d1bff, 0xea11d1ff, 0xe96b10ff, 0x07c5cdff, 0xfaf714ff, 0x9ea214ff};
+    private static final int[] colors = new int[] {0xfd0101ff, 0x180891ff, 0x098d1bff, 0xea11d1ff, 0xe96b10ff, 0x07c5cdff, 0xfaf714ff, 0x9ea214ff, 0xd4c5b4ff, 0xab8f6dff, 0x700686ff};
 
     private Ground[][] grounds;
     private int startX = -1;
     private int startY;
+    private int checkX;
+    private int checkY;
 
     @Override
     public void init() {
@@ -24,6 +26,30 @@ public class Level extends GameObject {
                     if(color == colors[i]) {
                         break;
                     }
+                }
+                if(i == 6) {
+                    int num = (int)(Math.random()*4);
+                    for(int j = 0; j < num; j++) {
+                        GameObject bush = scene.add("Bush");
+                        bush.position((x+(float)Math.random())*10-5,(y+(float)Math.random())*10-5,bush.position().z);
+                        GameObject gb = bush.children.get("G_Bush");
+                        gb.components.add(new BillboardComponent(gb));
+                    }
+                }
+                if(i == 8) {
+                    i = 6;
+                    GameObject gob = scene.add("Theatre");
+                    gob.position(x*10,y*10,4);
+                }
+                if(i == 9) {
+                    i = 6;
+                    GameObject gob = scene.add("Pillar");
+                    gob.position(x*10,y*10,1.5f);
+                }
+                if(i == 10) {
+                    checkX = x;
+                    checkY = y;
+                    i = 0;
                 }
                 GameObject go = scene.add("Ground");
                 go.position(x*10, y*10, 0);
@@ -57,9 +83,11 @@ public class Level extends GameObject {
                 grounds[x][y] = (Ground)go;
             }
         }
-        for(int i = 1; i < 6; i++) {
+        for(int i = 0; i < 6; i++) {
             Wagon w = (Wagon)scene.add("Wagon");
-            w.setStartPos(i);
+            int startPosY = i/2;
+            int startPosX = i%2;
+            w.position(startX*10+(startPosX == 0 ? -2 : +2), (startY-startPosY*0.5f)*10, 0.25f);
         }
     }
 
@@ -69,6 +97,14 @@ public class Level extends GameObject {
 
     public int getStartY() {
         return startY;
+    }
+
+    public int getCheckX() {
+        return checkX;
+    }
+
+    public int getCheckY() {
+        return checkY;
     }
 
     public Ground getGround(int x, int y) {

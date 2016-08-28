@@ -15,7 +15,6 @@ public class Wagon extends GameObject {
     private boolean onStart;
     private int turnMode;
     private float turnTimer;
-    private int startPos;
 
     public void init() {
         components.add(new WagonComponent(this));
@@ -35,18 +34,10 @@ public class Wagon extends GameObject {
         horseAnim.play("default");
         turnMode = 0;
         turnTimer = 0;
-        startPos = 0;
-    }
-
-    public void setStartPos(int startPos) {
-        this.startPos = startPos;
     }
 
     public void main() {
         if(!onStart && level.getStartX() != -1) {
-            int startPosY = startPos/2;
-            int startPosX = startPos%2;
-            position(level.getStartX()*10+(startPosX == 0 ? -2 : +2), (level.getStartY()-startPosY*0.5f)*10, 0.25f);
             targetX = level.getStartX();
             targetY = level.getStartY();
             lastTargetX = targetX;

@@ -15,11 +15,7 @@ public class FlameThrower extends Component {
     }
 
     public void toggle() {
-        if(state == off) {
-            state(on);
-        }else {
-            state(off);
-        }
+        toggle(state == off);
     }
 
     public void toggle(boolean b) {
@@ -45,7 +41,7 @@ public class FlameThrower extends Component {
         private float acc = 0;
 
         public void main() {
-            ((WagonComponent)g.components.get("WagonComponent")).slow(3.5f);
+            ((WagonComponent)g.components.get("WagonComponent")).slow(2.5f);
             Vector3f forward = g.orientation().mult(new Vector3f(0,3,0));
             Vector3f vel = forward.plus(g.velocity());
             acc += Bdx.TICK_TIME;
@@ -63,7 +59,7 @@ public class FlameThrower extends Component {
                 }
                 WagonComponent wc = (WagonComponent)go.components.get("WagonComponent");
                 if(wc != null) {
-                    go.velocity(0,0,0);
+                    wc.slow(0);
                 }
             }
         }

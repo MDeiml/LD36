@@ -74,7 +74,7 @@ public class WagonComponent extends Component {
                     slow = true;
                     break;
             }
-            if(slow) {
+            if(slow && g.touching("Ground")) {
                 vel = Math.min(vel, 1.5f);
             }
             vel = Math.min(extSlow, vel);
