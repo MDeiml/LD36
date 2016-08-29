@@ -40,6 +40,14 @@ public class FlameThrower extends Component {
 
         private float acc = 0;
 
+        public void enter() {
+            Bdx.sounds.get("Fire").play(1f/g.position().minus(g.scene.camera.position()).length());
+        }
+
+        public void exit() {
+            Bdx.sounds.get("Fire").stop();
+        }
+
         public void main() {
             ((WagonComponent)g.components.get("WagonComponent")).slow(2.5f);
             Vector3f forward = g.orientation().mult(new Vector3f(0,3,0));

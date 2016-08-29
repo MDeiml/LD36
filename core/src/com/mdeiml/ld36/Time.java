@@ -10,6 +10,10 @@ public class Time extends Text {
         time = 0;
     }
 
+    public void reset() {
+        time = 0;
+    }
+
     public void main() {
         time += Bdx.TICK_TIME;
         int sek = (int)time;

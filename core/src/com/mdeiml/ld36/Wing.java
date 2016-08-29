@@ -20,6 +20,7 @@ public class Wing extends GameObject {
         if(!parent().touching("Ground")) {
             return false;
         }
+        Bdx.sounds.get("jump").play(1f/(position().minus(scene.camera.position())).length());
         parent().applyForce(0,0,4/Bdx.TICK_TIME);
         return true;
     }

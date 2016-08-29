@@ -29,7 +29,7 @@ public class Player extends GameObject {
         horseAnim.add("unicorn", 1, new int[]{0, 1}, 5, true);
         horse.components.add(horseAnim);
         horseAnim.play("default");
-        money = 10000;
+        money = 0;
         components.add(new WagonComponent(this, horse));
     }
 
@@ -58,9 +58,7 @@ public class Player extends GameObject {
         }
         if(children.get("Wing") != null) {
             if(Bdx.keyboard.keyHit("space")) {
-                if(((Wing)children.get("Wing")).use()) {
-                    Bdx.sounds.get("jump").play();
-                }
+                ((Wing)children.get("Wing")).use();
             }
         }
 

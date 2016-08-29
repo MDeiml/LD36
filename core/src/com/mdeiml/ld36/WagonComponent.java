@@ -70,11 +70,21 @@ public class WagonComponent extends Component {
                 case 7:
                     if(check) {
                         lap++;
-                        if(lap >= 3) {
+                        if(lap >= 1) {
                             int nr = level.finish();
-                            System.out.println(nr);
                             if(g.name.equals("Player")) {
-                                System.out.println("oisdlgk");
+                                ((Menu)g.scene.objects.get("Menu")).on();
+                                switch(nr) {
+                                    case 1:
+                                        ((Player)g).money += 2000;
+                                        break;
+                                    case 2:
+                                        ((Player)g).money += 1000;
+                                        break;
+                                    case 3:
+                                        ((Player)g).money += 750;
+                                        break;
+                                }
                             }
                         }
                         check = false;

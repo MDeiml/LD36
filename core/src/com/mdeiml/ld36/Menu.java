@@ -37,7 +37,8 @@ public class Menu extends GameObject {
         player.orientation(ori);
         player.dynamics(false);
         for(GameObject o : scene.objects) {
-            if(o.name.equals("Wagon")) {
+            String name = o.name;
+            if(name.equals("Wagon") || name.equals("Ground") || name.equals("Wall") || name.equals("Barrel") || name.equals("Splash") || name.equals("Fence") || name.equals("Stone") || name.equals("Bush") || name.equals("Pillar") || name.equals("Theatre")) {
                 o.end();
             }
         }
@@ -50,6 +51,7 @@ public class Menu extends GameObject {
         scene.objects.get("MenuBackground").visible(false);
         scene.objects.get("Money").visible(false);
         scene.objects.get("Time").visible(true);
+        ((Time)scene.objects.get("Time")).reset();
         for(int i = 0; i < 4; i++) {
             scene.objects.get("Check"+i).visible(false);
         }
@@ -98,7 +100,7 @@ public class Menu extends GameObject {
                 }
             }
         }
-        ((Text)scene.objects.get("Money")).set(String.format("%05d$", money));
+        ((Text)scene.objects.get("Money")).set(String.format("%5d$", money));
         ((Player)scene.objects.get("Player")).money = money;
     }
 
