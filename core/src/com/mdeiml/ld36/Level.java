@@ -13,11 +13,14 @@ public class Level extends GameObject {
     private int startY;
     private int checkX;
     private int checkY;
+    private int finished;
 
     @Override
     public void init() {
+        if(scene.objects.get("Menu").visible())
+            return;
         Gdx.gl.glClearColor(0.6f,0.7f,1,1);
-        Pixmap pixmap = new Pixmap(Gdx.files.internal("bdx/textures/track.png"));
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("bdx/textures/track"+((int)(Math.random()*3))+".png"));
         grounds = new Ground[pixmap.getWidth()][pixmap.getHeight()];
         for(int x = 0; x < pixmap.getWidth(); x++) {
             for(int y = 0; y < pixmap.getHeight(); y++) {
@@ -105,6 +108,11 @@ public class Level extends GameObject {
             wall.position(pixmap.getWidth()*10-5, i*10, 5);
             wall.rotate(0, 0, -(float)(Math.PI/2));
         }
+    }
+
+    public int finish() {
+        finished++;
+        return finished;
     }
 
     public int getStartX() {

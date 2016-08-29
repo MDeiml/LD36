@@ -12,36 +12,55 @@ public class Wagon extends GameObject {
     private int targetY;
     private int lastTargetX;
     private int lastTargetY;
-    private Level level;
     private boolean onStart;
     private int turnMode;
     private float turnTimer;
     private float fireCooldown;
+    private float spikeCooldown;
 
     public void init() {
-        components.add(new WagonComponent(this));
-        level = (Level)scene.objects.get("Level");
         onStart = false;
         GameObject wagon = children.get("G_Wagon");
         wagon.components.add(new BillboardComponent(wagon));
         SpriteAnim wagonAnim = new SpriteAnim(wagon, 85, 85);
-        wagonAnim.add("default", (int)(Math.random()*2), new int[]{0, 1}, 5, true);
+        int model = (int)(Math.random()*2);
+        wagonAnim.add("default", model, new int[]{0, 1}, 5, true);
+        wagonAnim.add("spikes", model+2, new int[]{0, 1}, 5, true);
         wagon.components.add(wagonAnim);
         wagonAnim.play("default");
         GameObject horse = children.get("Horse");
         horse.components.add(new BillboardComponent(horse));
         SpriteAnim horseAnim = new SpriteAnim(horse, 101, 101);
         horseAnim.add("default", 0, new int[]{0, 1}, 5, true);
+        horseAnim.add("unicorn", 1, new int[]{0, 1}, 5, true);
         horse.components.add(horseAnim);
         horseAnim.play("default");
         turnMode = 0;
         turnTimer = 0;
+        components.add(new WagonComponent(this, horse));
 
-        components.add(new FlameThrower(this));
-        fireCooldown = (float)(Math.random()*5+5);
+        if(Math.random() < 0.5) {
+            components.add(new FlameThrower(this));
+            fireCooldown = (float)(Math.random()*5+5);
+        }
+        if(Math.random() < 0.3) {
+            ((WagonComponent)components.get("WagonComponent")).setUnicorn(true);
+        }
+        if(Math.random() < 0.3) {
+            GameObject wing = scene.add("Wing");
+            wing.parent(this);
+        }
+        if(Math.random() < 0.3) {
+            components.add(new SpikeComponent(this));
+            spikeCooldown = (float)(Math.random()*5+5);
+        }
     }
 
     public void main() {
+        Level level = (Level)scene.objects.get("Level");
+        if(level == null) {
+            return;
+        }
         //Extras
         if(components.get("FlameThrower") != null) {
             GameObject sensor = children.get("FlameThrowerSensor");
@@ -57,20 +76,48 @@ public class Wagon extends GameObject {
             }
             if(fireCooldown <= 0 && shoot) {
                 ((FlameThrower)components.get("FlameThrower")).toggle(true);
+                fireCooldown -= Bdx.TICK_TIME;
+                if(fireCooldown <= -1) {
+                    fireCooldown = 10;
+                }
             }else {
                 ((FlameThrower)components.get("FlameThrower")).toggle(false);
-            }
-            fireCooldown -= Bdx.TICK_TIME;
-            if(fireCooldown <= -1) {
-                fireCooldown = 10;
-            }
-        }else {
-            if(fireCooldown < 0) {
-                fireCooldown = -10*fireCooldown;
+                if(fireCooldown < 0) {
+                    fireCooldown = -10*fireCooldown;
+                }
             }
         }
         if(fireCooldown > 0) {
             fireCooldown = Math.max(0, fireCooldown-Bdx.TICK_TIME);
+        }
+
+        if(components.get("SpikeComponent") != null) {
+            GameObject sensor = children.get("SpikeSensor");
+            boolean shoot = false;
+            for(GameObject go : sensor.touchingObjects) {
+                if(go == this) {
+                    continue;
+                }
+                WagonComponent wc = (WagonComponent)go.components.get("WagonComponent");
+                if(wc != null) {
+                    shoot = true;
+                }
+            }
+            if(spikeCooldown <= 0 && shoot) {
+                ((SpikeComponent)components.get("SpikeComponent")).toggle(true);
+                fireCooldown -= Bdx.TICK_TIME;
+                if(spikeCooldown <= -1) {
+                    spikeCooldown = 10;
+                }
+            }else {
+                ((SpikeComponent)components.get("SpikeComponent")).toggle(false);
+                if(spikeCooldown < 0) {
+                    spikeCooldown = -10*spikeCooldown;
+                }
+            }
+        }
+        if(spikeCooldown > 0) {
+            spikeCooldown = Math.max(0, spikeCooldown-Bdx.TICK_TIME);
         }
 
         if(!onStart && level.getStartX() != -1) {
@@ -131,7 +178,16 @@ public class Wagon extends GameObject {
             lastTargetY = y;
             lastTargetX = x;
         }
-        if(velocity().length() < 1 && (touching("Barrel") || touching("Fence") || touching("Stone") || touching("Player") || touching("Wagon"))) {
+        boolean turn = false;
+        if(velocity().length() < 1 && (touching("Barrel") || touching("Fence") || touching("Stone"))) {
+            Wing wing = ((Wing)children.get("Wing"));
+            if(wing != null) {
+                wing.use();
+            }else {
+                turn = true;
+            }
+        }
+        if(turn || (velocity().length() < 1 && (touching("Player") || touching("Wagon")))) {
             if(turnMode == 0) {
                 turnMode = Math.random() > 0.5 ? -1 : 1;
             }

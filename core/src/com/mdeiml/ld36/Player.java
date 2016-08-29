@@ -15,9 +15,6 @@ public class Player extends GameObject {
     public void init() {
         cameraCross = children.get("CameraCross");
         camRot = 0;
-        components.add(new WagonComponent(this));
-        components.add(new FlameThrower(this));
-        components.add(new SpikeComponent(this));
         GameObject gPlayer = children.get("G_Player");
         gPlayer.components.add(new BillboardComponent(gPlayer));
         SpriteAnim playerAnim = new SpriteAnim(gPlayer, 85, 85);
@@ -29,14 +26,16 @@ public class Player extends GameObject {
         horse.components.add(new BillboardComponent(horse));
         SpriteAnim horseAnim = new SpriteAnim(horse, 101, 101);
         horseAnim.add("default", 0, new int[]{0, 1}, 5, true);
+        horseAnim.add("unicorn", 1, new int[]{0, 1}, 5, true);
         horse.components.add(horseAnim);
         horseAnim.play("default");
-        GameObject wing = scene.objects.get("Wing");
-        wing.parent(this);
         money = 10000;
+        components.add(new WagonComponent(this, horse));
     }
 
     public void main() {
+        if(scene.objects.get("Menu").visible())
+            return;
         //Controls
         if(Bdx.keyboard.keyHit("esc")) {
             Bdx.end();

@@ -1,22 +1,37 @@
 package com.mdeiml.ld36;
 
 import com.nilunder.bdx.*;
+import com.nilunder.bdx.components.SpriteAnim;
 import javax.vecmath.*;
 
 public class WagonComponent extends Component {
 
-    private Level level;
     private float extSlow;
     private boolean check;
     private int lap;
+    private GameObject horse;
+    private boolean unicorn;
 
-    public WagonComponent(GameObject g) {
+    public WagonComponent(GameObject g, GameObject horse) {
         super(g);
-        this.level = (Level)g.scene.objects.get("Level");
         state(def);
         extSlow = 100;
         check = false;
         lap = 0;
+        this.horse = horse;
+    }
+
+    public boolean isUnicorn() {
+        return unicorn;
+    }
+
+    public void setUnicorn(boolean u) {
+        this.unicorn = u;
+        if(u) {
+            ((SpriteAnim)horse.components.get("SpriteAnim")).play("unicorn");
+        }else {
+            ((SpriteAnim)horse.components.get("SpriteAnim")).play("default");
+        }
     }
 
     public void slow() {
@@ -29,10 +44,15 @@ public class WagonComponent extends Component {
 
     private State def = new State() {
         public void main() {
+            if(g.scene.objects.get("Menu").visible())
+                return;
+            Level level = (Level)g.scene.objects.get("Level");
+            if(level == null)
+                return;
             Vector3f velocity = g.velocity();
             float vel = (float)Math.sqrt(velocity.x*velocity.x+velocity.y*velocity.y);
             vel += Bdx.TICK_TIME+0.1f;
-            vel = Math.min(5, vel);
+            vel = Math.min(unicorn ? 6 : 5, vel);
 
             //Ground
             float x1 = (g.position().x+5)/10;
@@ -50,6 +70,13 @@ public class WagonComponent extends Component {
                 case 7:
                     if(check) {
                         lap++;
+                        if(lap >= 3) {
+                            int nr = level.finish();
+                            System.out.println(nr);
+                            if(g.name.equals("Player")) {
+                                System.out.println("oisdlgk");
+                            }
+                        }
                         check = false;
                     }
                 case 0:
