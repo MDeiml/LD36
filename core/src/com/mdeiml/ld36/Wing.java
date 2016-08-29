@@ -25,6 +25,10 @@ public class Wing extends GameObject {
     }
 
     public void main() {
+        if(parent() == null) {
+            end();
+            return;
+        }
         if(parent().touching("Ground"))
             sa.play("default");
         else
