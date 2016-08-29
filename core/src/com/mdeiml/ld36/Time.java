@@ -19,7 +19,7 @@ public class Time extends Text {
         int sek = (int)time;
         int min = sek/60;
         sek = sek%60;
-        set(String.format("%d:%02d", min, sek));
+        set(min+":"+(sek < 10 ? "0": "")+sek);
     }
 
 }

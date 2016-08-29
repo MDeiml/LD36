@@ -50,7 +50,7 @@ public class Wagon extends GameObject {
             GameObject wing = scene.add("Wing");
             wing.parent(this);
         }
-        if(Math.random() < 0.3) {
+        if(Math.random() < 1.3) {
             components.add(new SpikeComponent(this));
             spikeCooldown = (float)(Math.random()*5+5);
         }
@@ -105,7 +105,7 @@ public class Wagon extends GameObject {
             }
             if(spikeCooldown <= 0 && shoot) {
                 ((SpikeComponent)components.get("SpikeComponent")).toggle(true);
-                fireCooldown -= Bdx.TICK_TIME;
+                spikeCooldown -= Bdx.TICK_TIME;
                 if(spikeCooldown <= -1) {
                     spikeCooldown = 10;
                 }

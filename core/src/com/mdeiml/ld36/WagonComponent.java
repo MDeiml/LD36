@@ -76,13 +76,19 @@ public class WagonComponent extends Component {
                                 ((Menu)g.scene.objects.get("Menu")).on();
                                 switch(nr) {
                                     case 1:
-                                        ((Player)g).money += 2000;
+                                        ((Player)g).money += 3000;
                                         break;
                                     case 2:
-                                        ((Player)g).money += 1000;
+                                        ((Player)g).money += 2000;
                                         break;
                                     case 3:
-                                        ((Player)g).money += 750;
+                                        ((Player)g).money += 1500;
+                                        break;
+                                    case 4:
+                                        ((Player)g).money += 1000;
+                                        break;
+                                    default:
+                                        ((Player)g).money += 500;
                                         break;
                                 }
                             }

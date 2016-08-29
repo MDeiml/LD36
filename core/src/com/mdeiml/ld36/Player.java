@@ -29,7 +29,7 @@ public class Player extends GameObject {
         horseAnim.add("unicorn", 1, new int[]{0, 1}, 5, true);
         horse.components.add(horseAnim);
         horseAnim.play("default");
-        money = 0;
+        money = 10000;
         components.add(new WagonComponent(this, horse));
     }
 

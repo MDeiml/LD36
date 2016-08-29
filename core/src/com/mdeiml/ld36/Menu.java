@@ -100,7 +100,7 @@ public class Menu extends GameObject {
                 }
             }
         }
-        ((Text)scene.objects.get("Money")).set(String.format("%5d$", money));
+        ((Text)scene.objects.get("Money")).set(money+"$");
         ((Player)scene.objects.get("Player")).money = money;
     }
 

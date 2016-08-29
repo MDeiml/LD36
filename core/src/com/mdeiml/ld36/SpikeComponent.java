@@ -41,6 +41,7 @@ public class SpikeComponent extends Component {
             }
             SpriteAnim sa = (SpriteAnim)gr.components.get("SpriteAnim");
             sa.play("spikes");
+            Bdx.sounds.get("Blade").loop(1f/g.position().minus(g.scene.camera.position()).length());
         }
 
         public void exit() {
@@ -50,6 +51,7 @@ public class SpikeComponent extends Component {
             }
             SpriteAnim sa = (SpriteAnim)gr.components.get("SpriteAnim");
             sa.play("default");
+            Bdx.sounds.get("Blade").stop();
         }
 
         public void main() {
